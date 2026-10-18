@@ -36,21 +36,22 @@ await fs.writeFile(path.join(out,'read.html'),reader());
 for(const c of documents)await fs.writeFile(path.join(out,`${c.slug}.html`),reader(c.slug));
 await fs.writeFile(path.join(out,'all.html'),reader('',true));
 const features=[
- ['零基础有起点','默认方案、文件说明、操作步骤和验收结果，先运行，再逐步修改。'],
- ['先把游戏做得好玩','将选择、奖励、不确定性和收获，落实到菜单、客流、设备和每日经营。'],
- ['AI 协作能落地','用任务卡拆解需求，追踪按钮到规则，学习检查、调试和回退。'],
- ['美术声音有设计','从信息草图与风格板，到原创 SVG、状态反馈和合成音，知道每步做什么。'],
- ['案例直接运行','三个学习阶段、七天经营循环、源码 ZIP 与规则测试，无需 AI API 密钥。'],
- ['走完发布与迭代','准备构建、页面和检查记录，让陌生玩家能够打开，再根据反馈改进。']
+ ['不会编程，也能开始','把想法告诉 AI，让它建项目、写代码、启动预览。你先玩一玩，再说要改哪里。'],
+ ['没想好玩法，就看两个方案','请 AI 用一轮营业讲清区别。选你更想玩的那一种，再做成短版试。'],
+ ['照着例子和 AI 说','从采购、菜单到存档，每一步都有具体说法。遇到问题，也知道怎样讲清楚。'],
+ ['画面和声音，由 AI 来做','你选喜欢的样子和声音，再看它们放进游戏合不合适，不必自己画图或作曲。'],
+ ['先玩一家小餐厅','案例分成三个阶段，可以在线试玩，也可以把文件交给 AI，继续做成你的版本。'],
+ ['最后发给真正的玩家','让 AI 准备发布文件和页面，你确认后公开，再根据试玩意见改下一版。']
 ];
 let home=await fs.readFile(path.join(out,'index.html'),'utf8');
-home=home.replace('从构思到上线，以一家餐厅为例。','零基础开始，用 AI 把想法做成可玩的经营游戏。').replace('把一个经营游戏想法变成可玩的作品。学习调研与设计，组织 AI 写代码、制作素材，再完成测试、发布和第一次更新。','不会设计、不会编程，也有一条可以开始的路线：用默认方案起步，跟着可玩餐厅案例理解乐趣、制作素材、实现规则，再完成发布与更新。');
+home=home.replace('从构思到上线，以一家餐厅为例。','你说想做成什么样，让 AI 帮你做出来。').replace('把一个经营游戏想法变成可玩的作品。学习调研与设计，组织 AI 写代码、制作素材，再完成测试、发布和第一次更新。','不要求你会编程或设计。用一家小餐厅作例子，学习怎样提想法、选方案、试玩和修改；代码、素材、修错和打包交给 AI。');
 home=home.replace('<a class="primary" href="preface.html">开始阅读 <span>→</span></a>','<a class="primary" href="read.html">连续阅读全书 <span>→</span></a>').replace(`<a class="secondary" href="${config.repo}">查看 GitHub</a>`,'<a class="secondary" href="examples/restaurant/index.html?stage=3">先玩餐厅案例 ↗</a>');
 home=home.replace('<span>4 万字以内</span>','<span>11 张原创图表</span><span>3 个可玩阶段</span>');
-const benefits=`<section class="selling-points"><div class="section-kicker">这本书具体帮你做什么</div><h2>先能开始，再逐步理解。</h2><div class="benefit-grid">${features.map(([title,text],i)=>`<div class="benefit"><span>0${i+1}</span><h3>${title}</h3><p>${text}</p></div>`).join('')}</div></section>`;
+const benefits=`<section class="selling-points"><div class="section-kicker">这本书会陪你做什么</div><h2>从“我想做一家小店”开始。</h2><div class="benefit-grid">${features.map(([title,text],i)=>`<div class="benefit"><span>0${i+1}</span><h3>${title}</h3><p>${text}</p></div>`).join('')}</div></section>`;
 home=home.replace('<section class="path-section">',`${benefits}<section class="path-section">`);
-home=home.replace(/<div class="workflow">[\s\S]*?<\/div>/,`<div class="stage-grid"><a href="examples/restaurant/index.html?stage=1"><b>01 最小循环</b><span>采购、制作、收款与结算</span></a><a href="examples/restaurant/index.html?stage=2"><b>02 选择与风险</b><span>菜单、价格、预告与损耗</span></a><a href="examples/restaurant/index.html?stage=3"><b>03 完整教学版</b><span>设备、七天目标与存档</span></a></div>`).replace('从第一步，走到第一次更新','一页读下去，无需逐章翻页。');
+home=home.replace(/<div class="workflow">[\s\S]*?<\/div>/,`<div class="stage-grid"><a href="examples/restaurant/index.html?stage=1"><b>01 先开门卖简餐</b><span>采购、制作、收款与结算</span></a><a href="examples/restaurant/index.html?stage=2"><b>02 换菜单，看客流</b><span>菜单、价格、预告与损耗</span></a><a href="examples/restaurant/index.html?stage=3"><b>03 经营七天</b><span>设备、七天目标与存档</span></a></div>`).replace('从第一步，走到第一次更新','一页读下去，无需逐章翻页。');
 home=home.replace('当前是首轮书稿，尚未附完整餐厅成品、美术包或真人试玩数据。欢迎指出错误、提交实践反馈，一起把过程写得更扎实。','案例现已提供源码、原创矢量图标、合成声音与规则测试。为便于学习，布局与岗位做了简化；自由装修、独立员工寻路、背景音乐与真人试玩研究不在本版范围。');
+home=home.replace('每章提供方法、案例、AI 任务示例与验收方式。配套仓库包含立项、调研、任务和发布模板，以及可运行的经济模型。','每章都围绕一件具体的事：怎样让 AI 做出采购、菜单、画面、声音或保存。附录里的示例可以直接复制，再换成自己的要求。');
 home=home.replace('<div class="resource-links">','<div class="resource-links"><a href="downloads/restaurant.zip" download>下载餐厅源码 ZIP ↓</a>');
 await fs.writeFile(path.join(out,'index.html'),paths(home));
 await fs.mkdir(path.join(out,'downloads'),{recursive:true});

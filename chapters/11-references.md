@@ -1,37 +1,32 @@
-# 参考资料与核查说明
+# 资料来源与案例说明
 
-本书把设计建议、教学案例与外部事实分别表述。下面的官方资料于 **2026 年 10 月 18 日**核查；平台规则、软件版本和页面界面可能变化，实际使用前请重新检查。
+书中提到的游戏和平台，可以从下面的官方页面继续了解。这些页面在 2026 年 10 月 18 日核查过；发布时再请 AI 检查一遍当时的要求。
 
-## 竞品与调研
+## 看看其他餐厅游戏
 
-- [PlateUp! 官方资料](https://www.plateupgame.com/presskit/)：用于确认其公开介绍的操作、布局、设备、合作与局间成长机制。正文的分析方向属于作者提出的问题，不等同亲自试玩结论。
-- [Recipe for Disaster 官方商店页面](https://store.steampowered.com/app/1492360/Recipe_for_Disaster/)：用于确认其公开介绍的员工、菜单、顾客与布局管理内容。本书未依据商店评论推算销量或收入。
+- [PlateUp! 官方介绍](https://www.plateupgame.com/presskit/)：厨房布局、设备、合作游玩和局间成长。
+- [Recipe for Disaster 商店页面](https://store.steampowered.com/app/1492360/Recipe_for_Disaster/)：员工、菜单、顾客和餐厅布置。
 
-## 技术路线与发布
+书里依据公开介绍提出了观察问题。想判断实际手感，仍要自己试玩或查看完整游玩过程。评论用来寻找具体问题，书中没有据此推算销量和收入。
 
-- [Phaser 官方介绍](https://docs.phaser.io/phaser/getting-started/what-is-phaser)：解释该框架面向 Web 的 2D 定位与语言支持。本书基础示例不依赖 Phaser。
-- [itch.io HTML5 发布文档](https://itch.io/docs/creators/html5)：说明浏览器游戏上传、入口文件与资源路径。发布时检查最新文件限制与界面。
-- [GitHub Pages 自定义工作流](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)：本书阅读站点采用的构建与部署方式。
-- [Steamworks 入门](https://partner.steamgames.com/doc/gettingstarted)：桌面商店扩展路线的官方入口。
-- [Steam 内容调查](https://partner.steamgames.com/doc/gettingstarted/contentsurvey)：有关产品内容与生成式 AI 内容的当前说明。正文没有把 AI 辅助编程与玩家消费的生成内容混为同一事项。
+## 准备发布时给 AI 看
 
-## 入门与浏览器 API
+- [itch.io 浏览器游戏发布说明](https://itch.io/docs/creators/html5)：怎样上传、入口文件放在哪里，以及资源路径要求。
+- [GitHub Pages 发布说明](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)：本书阅读站点采用的发布方式。
+- [Steamworks 入门](https://partner.steamgames.com/doc/gettingstarted)：桌面商店的入驻、构建和发布入口。
+- [Steam 内容调查](https://partner.steamgames.com/doc/gettingstarted/contentsurvey)：平台怎样询问产品内容和生成式 AI 内容。
+- [Web Audio 实践说明](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices)：给 AI 处理浏览器声音启动和控制时参考。
 
-- [MDN 第一个网站](https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website)：HTML、CSS、JavaScript 与发布的入门路径。
-- [MDN Web Audio 实践](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Best_practices)：声音启动、控制与浏览器行为。
-- [MDN localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)：本机存储的行为与限制。
-- [GitHub 入门](https://docs.github.com/en/get-started/using-github/hello-world)：仓库、分支与提交的官方入门资料。
+## 街角餐厅里的数字
 
-## 教学数据与验证边界
+一千元起始现金、三道菜的价格和制作时间，都为这份教学案例设置。它们帮助说明菜单、现金与排队怎样互相影响，不对应真实餐饮生意。
 
-街角餐厅为本书构造的教学案例。菜品、现金、费用、时间和升级价格都是初始假设；只有明确提供输入与输出的计算，才属于可复算结果。经济示例的测试保护记账关系，不代表经营平衡已经验证。
+配套案例能够运行，账目和主要规则有自动检查，但还没有足够多玩家的长期试玩。要发布自己的游戏，仍需根据实际反馈调价格、时间和难度。
 
-提示词展示预期工作方式，假设的 AI 错误用于说明如何诊断。配套案例现已提供可运行的教学循环；正文不把它当作经过真人试玩或商业平衡验证的成品。
+文中的委托与对话是示范说法，方便读者修改后使用，不是冒充某次真实合作记录。图表、矢量图标和合成音代码随仓库提供。
 
-后续贡献若增加实际试玩与工具验证，应记录版本、条件、方法和结果；增加外部主张时应补充直接支持该主张的来源。
+## 篇幅怎么算
 
-## 字数与版本
+全书上限四万字。首页显示构建时统计的汉字数，连续的英文或数字算一个单元，代码块和链接地址不计入。它便于比较修订前后，不等同印刷版的版面计数。
 
-站点构建统计所有正文文件的汉字数，并将连续的拉丁字母或数字单元计为一字，排除代码块和链接地址。它是明确可复现的篇幅口径，不等同出版机构的版面计数。正文上限为 40,000；源码、许可全文和配套模板不计入正文。
-
-当前版本为 0.2.0 修订稿，补充零基础操作、乐趣与奖励、美术音频设计、实现步骤和可运行案例。图表为本书原创 SVG；案例包含原创矢量素材和合成声音，真实玩家研究仍待积累。
+0.3.0 重写了讲解顺序和语言。读者提出想法、选方案、试玩和反馈，AI 负责实现；删掉了重复说明和要求读者手动编程的练习。
