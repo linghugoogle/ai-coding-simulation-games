@@ -20,7 +20,8 @@
   .stage-grid a { display:flex; flex-direction:column; padding:17px 14px; gap:10px; background:var(--panel); border:1px solid var(--line); border-radius:5px; }
   .stage-grid b { font-size:13px; font-weight:600; }.stage-grid span { color:var(--muted); font-size:11px; }
   .reading-intro { font-size:12px; color:var(--muted); display:flex; flex-wrap:wrap; gap:10px 18px; padding:0 0 24px; border-bottom:1px solid var(--line); margin-bottom:30px; }
-  .book-chapter { scroll-margin-top:90px; }
+  /* 页顶留白统一由 html 的 scroll-padding-top 提供，避免锚点偏移叠加。 */
+  .book-chapter { scroll-margin-top:0px; }
   .book-chapter+.book-chapter { margin-top:80px; padding-top:34px; border-top:1px solid var(--line); }
   .chapter-divider { display:flex; justify-content:space-between; gap:16px; color:var(--muted); font-size:11px; margin-bottom:18px; letter-spacing:1px; }
   .chapter-feedback { margin:35px 0 0; }

@@ -62,8 +62,10 @@
     const headings = [...document.querySelectorAll('.book-chapter h2')];
     function track() {
       ticking = false;
-      const current = [...articles].reverse().find(item => item.getBoundingClientRect().top < 160) || articles[0];
-      const heading = [...headings].reverse().find(item => item.getBoundingClientRect().top < 150 && item.closest('.book-chapter') === current);
+      // 高亮与锚点滚动使用同一阅读线，包含 1px 容差以覆盖缩放后的舍入。
+      const readingLine = (parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 96) + 1;
+      const current = [...articles].reverse().find(item => item.getBoundingClientRect().top <= readingLine) || articles[0];
+      const heading = [...headings].reverse().find(item => item.getBoundingClientRect().top <= readingLine && item.closest('.book-chapter') === current);
       const anchor = heading?.id || current.id;
       const progress = Math.min(100, Math.max(0, Math.round(scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight) * 100)));
       document.documentElement.style.setProperty('--book-progress', `${progress}%`);
