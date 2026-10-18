@@ -8,9 +8,11 @@
 
 ## 当前版本
 
-v0.1.0 为首轮书稿：九章正文、前言、模板和来源说明均已撰写。全书总量上限 4 万字，当前实际统计由构建生成并显示在阅读首页。示例参数与教学情境不代表商业游戏的已验证平衡数据。
+v0.2.0 为全流程实践修订版：扩写零基础操作、乐趣与奖励、美术音频设计和逐步实现，正文超过 3 万字，包含 11 张原创示意图。全书总量上限 4 万字，实际统计由构建生成并显示在阅读首页。
 
-配套目录 `examples/` 包含可运行的经营经济模型和测试；正文中的其他片段为教学示例。本版本尚未附带完整餐厅成品游戏、AI 生成美术包或真实玩家试玩报告，这些内容不作为已经完成的成果宣传。
+配套目录 `examples/restaurant/` 提供三个可玩阶段、七天经营循环、源码、原创 SVG 和程序合成音效；`examples/economy.mjs` 提供账目实验。案例采用固定布局与简化岗位，没有自由装修、独立员工寻路或背景音乐；参数尚未通过真人试玩与商业平衡验证。
+
+[连续阅读全文](https://linghugoogle.github.io/ai-coding-simulation-games/read.html) · [试玩餐厅](https://linghugoogle.github.io/ai-coding-simulation-games/examples/restaurant/index.html?stage=3) · [下载案例源码](https://linghugoogle.github.io/ai-coding-simulation-games/downloads/restaurant.zip)
 
 ## 目录
 
@@ -40,12 +42,13 @@ npm run dev
 npm run build     # 生成 dist/，包括独立章节与全文版
 npm run check     # 检查章节、链接、字数与生成结果
 npm test          # 验证经济示例
+npm run demo      # 单独启动餐厅案例
 node examples/economy.mjs
 ```
 
 ## 阅读功能
 
-静态章节页面、全文搜索、章节内目录、上一篇与下一篇、浅色与深色模式、字号调整、阅读进度、手机导航，以及可打印的全文版。正文无需 JavaScript 也能阅读；偏好和进度只保存在本机。
+全文连续滚动、目录随位置更新、章节内搜索定位、浅色与深色模式、字号调整、继续阅读、手机导航、可打印全文版。全书正文静态加载，无需手动逐章翻页；旧章节链接仍可使用。偏好和进度只保存在本机。
 
 向 `main` 推送后，GitHub Actions 自动检查、构建并发布到 GitHub Pages。构建不依赖 AI 服务，不需要填写 API 密钥。
 

@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>街角餐厅 · 本书可运行案例</title><link rel="stylesheet" href="style.css"><script type="module" src="ui.mjs"></script></head>
+<body><header><a href="https://linghugoogle.github.io/ai-coding-simulation-games/">← 返回小册子</a><span>可运行教学案例 · 无需 AI 密钥</span></header>
+<main><section class="intro"><div><p class="eyebrow">七天的小店实验</p><h1>街角餐厅</h1><p>准备一份菜单，观察一天营业，把赚到的经验和现金投入下一天。</p></div><nav aria-label="学习阶段"><a href="?stage=1">① 最小循环</a><a href="?stage=2">② 选择与风险</a><a href="?stage=3">③ 完整教学版</a></nav></section>
+<section class="stats" aria-label="经营状态" id="stats"></section>
+<p class="forecast" id="forecast"></p><p id="message" role="status">先选菜单、采购，再开门。第一次可采购 15 份简餐。</p>
+<div class="game-grid"><section class="floor-panel"><div class="panel-title"><h2>今日营业</h2><div class="controls"><button id="start">开门营业</button><button id="pause">暂停</button><button id="speed">速度 ×1</button></div></div>
+<div class="floor"><div class="kitchen"><h3>厨房 · <span id="station-count"></span></h3><div id="stations"></div></div><div class="dining"><h3>用餐区</h3><div id="tables"></div></div></div>
+<div class="queue-heading"><h3>订单与等待</h3><span>耐心 45 秒 · 开工扣食材 · 完成才收款</span></div><div id="orders" class="orders"></div>
+<section class="report" id="report" hidden></section><section class="log-panel"><h3>小店记录</h3><ul id="log"></ul></section></section>
+<aside><section class="panel"><h2>营业前安排</h2><div id="menu"></div><label class="price-label" data-min-stage="2">售价档位<select id="price"><option value="0.8">亲民 · 基价 80%</option><option value="1" selected>原价</option><option value="1.25">精品 · 基价 125%</option></select></label><p class="hint" data-min-stage="2">高价增加每单收入，也会让部分顾客放弃购买。</p></section>
+<section class="panel" data-min-stage="3"><h2>设备投资</h2><div id="upgrades"></div><p class="hint">先看流失原因，再决定买什么。现金要留给采购和固定费用。</p></section>
+<section class="panel" data-min-stage="3"><h2>收获与目标</h2><p>尝试一天服务 12 人，并经营至第 7 天。</p><div id="badges"></div></section>
+<section class="panel" data-min-stage="3"><h2>保存与声音</h2><div class="save-controls"><button id="save">保存进度</button><button id="load">读取进度</button><button id="audio">开启声音</button><button id="restart">重新开始</button></div><p class="hint">仅准备或结算阶段可保存；进度只在本机。声音由代码合成，默认关闭。</p></section></aside></div>
+<footer>这是教学规模的可玩案例，包含固定种子、采购、排队、菜单、升级、日报和存档。布局固定，岗位过程做了简化；它不是已经过商业平衡验证的成品。</footer></main></body></html>

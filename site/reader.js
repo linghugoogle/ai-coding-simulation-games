@@ -45,7 +45,8 @@
       status.textContent = matches.length ? `找到 ${matches.length} 个相关章节` : '没有找到结果，请换一个关键词。';
       for (const item of matches) {
         const a = document.createElement('a'), heading = document.createElement('strong'), snippet = document.createElement('span');
-        a.href = `${item.slug}.html`; a.className = 'search-result'; heading.textContent = item.title;
+        const section = item.sections?.find(part => terms.some(term => `${part.title} ${part.text}`.toLocaleLowerCase().includes(term)));
+        a.href = `read.html#${section?.id || `chapter-${item.slug}`}`; a.className = 'search-result'; heading.textContent = item.title;
         const index = item.text.toLocaleLowerCase().indexOf(terms[0]);
         const start = Math.max(0, index - 36);
         snippet.textContent = `${start ? '…' : ''}${item.text.slice(start, start + 150)}…`;
@@ -54,24 +55,48 @@
     } catch { if (version === queryVersion) status.textContent = '搜索索引暂时无法加载，请从左侧目录阅读。'; }
   });
 
-  const slug = document.body.dataset.chapter;
-  const headings = [...document.querySelectorAll('article h2')];
-  if (slug && slug !== 'all') {
-    let ticking = false;
+  const reading = document.body.dataset.reading === 'true';
+  const articles = [...document.querySelectorAll('.book-chapter')];
+  if (reading && articles.length) {
+    let ticking = false, activeSlug = '';
+    const headings = [...document.querySelectorAll('.book-chapter h2')];
     function track() {
       ticking = false;
-      const heading = [...headings].reverse().find(item => item.getBoundingClientRect().top < 140);
-      const anchor = heading?.id || '';
-      set('book-last', JSON.stringify({ slug, anchor, title: document.title.split(' · ')[0] }));
+      const current = [...articles].reverse().find(item => item.getBoundingClientRect().top < 160) || articles[0];
+      const heading = [...headings].reverse().find(item => item.getBoundingClientRect().top < 150 && item.closest('.book-chapter') === current);
+      const anchor = heading?.id || current.id;
+      const progress = Math.min(100, Math.max(0, Math.round(scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight) * 100)));
+      document.documentElement.style.setProperty('--book-progress', `${progress}%`);
+      $('#reading-progress')?.setAttribute('aria-valuenow', String(progress));
+      if ($('#reading-position')) $('#reading-position').textContent = `${current.dataset.title} · ${progress}%`;
+      set('book-last', JSON.stringify({ slug: current.dataset.slug, anchor, title: current.dataset.title }));
+      if (current.dataset.slug !== activeSlug) {
+        activeSlug = current.dataset.slug;
+        document.querySelectorAll('[data-chapter-link]').forEach(a => { if(a.dataset.chapterLink === activeSlug) a.setAttribute('aria-current','location'); else a.removeAttribute('aria-current'); });
+        document.querySelectorAll('[data-toc]').forEach(nav => nav.hidden = nav.dataset.toc !== activeSlug);
+      }
       document.querySelectorAll('.page-toc a').forEach(a => a.classList.toggle('active', a.hash === `#${anchor}`));
     }
+    // 旧章节地址保留，但同样一次提供整本书；只改变初始阅读位置。
+    const start = document.body.dataset.start;
+    if (!location.hash && start) {
+      history.replaceState(null,'',`#chapter-${start}`);
+      document.getElementById(`chapter-${start}`)?.scrollIntoView();
+    }
     window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(track); } }, { passive: true });
-    track();
-  } else if (!slug) {
+    window.addEventListener('hashchange', () => { closeNav(); track(); });
+    document.querySelectorAll('[data-chapter-link]').forEach(a => a.addEventListener('click', event => {
+      const id = `chapter-${a.dataset.chapterLink}`;
+      if (document.getElementById(id)) { event.preventDefault(); history.pushState(null,'',`#${id}`); document.getElementById(id).scrollIntoView(); closeNav(); track(); }
+    }));
+    // 图表未加载时也预留了宽高；页面就绪后再同步深链接位置与进度。
+    window.addEventListener('load', () => { if(location.hash)document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView(); track(); }, {once:true});
+    requestAnimationFrame(track);
+  } else {
     try {
       const last = JSON.parse(get('book-last'));
       if (last && /^[a-z0-9-]+$/.test(last.slug)) {
-        const a = $('#continue-reading'); a.href = `${last.slug}.html${last.anchor ? `#${encodeURIComponent(last.anchor)}` : ''}`;
+        const a = $('#continue-reading'); a.href = `read.html#${encodeURIComponent(last.anchor || `chapter-${last.slug}`)}`;
         a.textContent = `继续阅读：${last.title}`; a.hidden = false;
       }
     } catch { /* 无历史时显示正常首页 */ }

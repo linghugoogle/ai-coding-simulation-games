@@ -4,7 +4,7 @@
   "description": "一本面向个人开发者的开源实践小册子。学习竞品调研、玩法设计、AI 协作、美术素材、游戏开发、测试、发布与迭代。",
   "repo": "https://github.com/linghugoogle/ai-coding-simulation-games",
   "site": "https://linghugoogle.github.io/ai-coding-simulation-games/",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "updated": "2026-10-18",
   "chapters": [
     { "slug": "preface", "file": "chapters/00-preface.md", "label": "开始阅读", "title": "前言与阅读方法" },
