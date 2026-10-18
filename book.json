@@ -4,7 +4,7 @@
   "description": "不用先学编程和设计。以一家餐厅为例，学习怎样把想法交给 AI，选方案、试玩、修改，再把游戏发布给玩家。",
   "repo": "https://github.com/linghugoogle/ai-coding-simulation-games",
   "site": "https://linghugoogle.github.io/ai-coding-simulation-games/",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "updated": "2026-10-18",
   "chapters": [
     {

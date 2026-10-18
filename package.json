@@ -1,6 +1,6 @@
 {
   "name": "ai-coding-simulation-games-book",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "type": "module",
   "description": "用 AI Coding 开发模拟经营游戏：从构思到上线",

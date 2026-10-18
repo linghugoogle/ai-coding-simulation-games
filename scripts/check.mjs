@@ -44,7 +44,18 @@ assert.ok(search.some(item => item.sections?.some(section=>section.text.includes
 const reader=await fs.readFile(path.join(out,'read.html'),'utf8');
 assert.equal((reader.match(/class="prose book-chapter"/g)||[]).length,config.chapters.length,'连续阅读必须静态包含每一章');
 assert.ok(!reader.includes('class="pagination"'),'连续阅读不要求翻页');
-assert.equal((reader.match(/class="teaching-figure"/g)||[]).length,11,'十一张图表须在正文中出现');
+assert.equal((reader.match(/class="teaching-figure"/g)||[]).length,12,'十二张图表与素材图须在正文中出现');
+const screenshots=(await fs.readdir(path.join(root,'site/screenshots'))).filter(name=>name.endsWith('.png'));
+assert.equal(screenshots.length,7,'保留七张餐厅实际运行截图');
+assert.equal(stats.screenshots,screenshots.length,'首页统计与截图数量一致');
+for(const name of screenshots){
+ const png=await fs.readFile(path.join(out,'assets/screenshots',name));
+ assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a',`无效的 PNG 截图：${name}`);
+ const width=png.readUInt32BE(16),height=png.readUInt32BE(20);
+ assert.ok(width>0&&height>0,`截图尺寸无效：${name}`);
+ assert.ok(reader.includes(`src="assets/screenshots/${name}"`),`截图没有插入正文：${name}`);
+ assert.ok(reader.includes(`width="${width}" height="${height}"`),`截图应保留实际宽高：${name}`);
+}
 const home=await fs.readFile(path.join(out,'index.html'),'utf8');
 assert.equal((home.match(/class="benefit"/g)||[]).length,6);
 assert.ok(home.includes('downloads/restaurant.zip'));

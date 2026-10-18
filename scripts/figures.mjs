@@ -36,4 +36,12 @@ await save('sound-map','声音先设计事件与含义','一个事件对应一�
  box(30,90,270,215,'操作反馈',['采购成功：短促低音','按钮拒绝：轻提示','让人知道已经买到'])+box(325,90,270,215,'结果与奖励',['完成一单：明亮单音','达成目标：短上行音型','让人听见这单做成了'])+box(620,90,270,215,'环境与节奏',['营业音乐：低存在感','打烊：淡出，留出结算空间','不抢走经营时的注意力'])+text(40,365,['请 AI 做短音供你试听；放进真实营业中，听听会不会吵。'],19),420);
 await save('delivery','发布不是把代码直接扔给玩家','先构建、预览、检查资源与存档，再上传与收集反馈。',
  box(30,90,270,210,'请 AI 准备发布包',['保存这一版，写清版本号','只打包运行文件','保留许可与资源清单'])+box(325,90,270,210,'用公开地址玩一遍',['新浏览器完成一轮','图片和声音都正常','旧进度能继续打开'])+box(620,90,270,210,'发布与更新',['真实截图和操作说明','反馈入口与版本号','留好上一版，出错能退回'])+arrow(303,190,320,190)+arrow(598,190,615,190),380);
-console.log('Generated 11 original SVG teaching figures.');
+const gameAssets=await fs.readFile(path.resolve(import.meta.dirname,'../examples/restaurant/assets.svg'),'utf8');
+const symbols=gameAssets.match(/<defs>([\s\S]*?)<\/defs>/)[1];
+const assetCards=[['stove','炉灶','工作时发亮，并显示剩余时间'],['table','空桌','没有顾客时显示桌子和餐盘'],['customer','顾客入座','旁边写明等餐或用餐状态'],['dish-simple','简餐','售价 20 · 制作 10 秒'],['dish-rice','盖饭','售价 30 · 制作 18 秒'],['dish-set','招牌套餐','售价 45 · 制作 30 秒']];
+const assetBoard=assetCards.map(([id,label,note],i)=>{
+ const x=30+(i%3)*298,y=85+Math.floor(i/3)*180;
+ return `<rect x="${x}" y="${y}" width="270" height="160" rx="12" fill="#fbf8ee" stroke="#d3dacb"/><svg x="${x+95}" y="${y+8}" width="80" height="76"><use href="#${id}"/></svg>${text(x+20,y+113,[label],19)}${text(x+20,y+141,[note],13,'#69786c')}`;
+}).join('');
+await save('asset-board','游戏里实际使用的六种素材','从案例 assets.svg 提取炉灶、桌子、顾客与三种菜品，不是未实现的概念图。',`<defs>${symbols}</defs>${assetBoard}`,480);
+console.log('Generated 12 original SVG teaching figures, including the game asset board.');

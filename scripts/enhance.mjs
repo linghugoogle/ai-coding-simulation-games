@@ -7,6 +7,11 @@ const stats=JSON.parse(await fs.readFile(path.join(out,'stats.json'),'utf8'));
 const figureSizes=new Map(await Promise.all((await fs.readdir(path.join(root,'site/figures'))).map(async name=>{
  const svg=await fs.readFile(path.join(root,'site/figures',name),'utf8');const view=svg.match(/viewBox="0 0 (\d+) (\d+)"/);return[name,view?{width:view[1],height:view[2]}:{width:920,height:480}];
 })));
+const screenshotNames=(await fs.readdir(path.join(root,'site/screenshots'))).filter(name=>name.endsWith('.png'));
+for(const name of screenshotNames){
+ const png=await fs.readFile(path.join(root,'site/screenshots',name));
+ figureSizes.set(name,{width:png.readUInt32BE(16),height:png.readUInt32BE(20)});
+}
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const documents=await Promise.all(config.chapters.map(async c=>({...c,html:await fs.readFile(path.join(out,`${c.slug}.html`),'utf8')})));
 function paths(source){
@@ -15,7 +20,11 @@ function paths(source){
 }
 const articles=documents.map(c=>{
  let article=c.html.match(/<article class="prose">([\s\S]*?)<\/article>/)[1];
- article=article.replace(/<p><img src="([^"]+)" alt="([^"]*)"[^>]*><\/p>/g,(_,src,alt)=>{const size=figureSizes.get(path.basename(src))||{width:920,height:480};return `<figure class="teaching-figure"><div class="figure-scroll" tabindex="0" aria-label="图表，可横向滚动"><img src="${src}" alt="${alt}" width="${size.width}" height="${size.height}" loading="lazy" decoding="async"></div><figcaption>${alt} · <a href="${src}" target="_blank" rel="noopener">查看大图 ↗</a></figcaption></figure>`;});
+ article=article.replace(/<p><img src="([^"]+)" alt="([^"]*)"[^>]*><\/p>/g,(_,src,alt)=>{
+  const size=figureSizes.get(path.basename(src))||{width:920,height:480};
+  const screenshot=src.includes('/screenshots/');
+  return `<figure class="teaching-figure${screenshot?' screenshot-figure':''}"><div class="figure-scroll" tabindex="0" aria-label="${screenshot?'游戏实机截图':'图表'}，可横向滚动"><img src="${src}" alt="${alt}" width="${size.width}" height="${size.height}" loading="lazy" decoding="async"></div><figcaption>${alt} · <a href="${src}" target="_blank" rel="noopener">查看大图 ↗</a></figcaption></figure>`;
+ });
  const count=stats.chapters.find(x=>x.slug===c.slug).count;
  return `<article class="prose book-chapter" id="chapter-${c.slug}" data-slug="${c.slug}" data-title="${escape(c.title)}"><div class="chapter-divider"><span>${escape(c.label)}</span><span>${count} 字 · 约 ${Math.ceil(count/350)} 分钟</span></div>${article}<div class="chapter-feedback"><span>本章有问题？</span><a href="${config.repo}/issues/new?title=${encodeURIComponent(`[${c.title}] `)}">提交反馈 ↗</a></div></article>`;
 }).join('');
@@ -46,9 +55,10 @@ const features=[
 let home=await fs.readFile(path.join(out,'index.html'),'utf8');
 home=home.replace('从构思到上线，以一家餐厅为例。','你说想做成什么样，让 AI 帮你做出来。').replace('把一个经营游戏想法变成可玩的作品。学习调研与设计，组织 AI 写代码、制作素材，再完成测试、发布和第一次更新。','不要求你会编程或设计。用一家小餐厅作例子，学习怎样提想法、选方案、试玩和修改；代码、素材、修错和打包交给 AI。');
 home=home.replace('<a class="primary" href="preface.html">开始阅读 <span>→</span></a>','<a class="primary" href="read.html">连续阅读全书 <span>→</span></a>').replace(`<a class="secondary" href="${config.repo}">查看 GitHub</a>`,'<a class="secondary" href="examples/restaurant/index.html?stage=3">先玩餐厅案例 ↗</a>');
-home=home.replace('<span>4 万字以内</span>','<span>11 张原创图表</span><span>3 个可玩阶段</span>');
+home=home.replace('<span>4 万字以内</span>',`<span>12 张图表与素材图</span><span>${screenshotNames.length} 张实机截图</span><span>3 个可玩阶段</span>`);
 const benefits=`<section class="selling-points"><div class="section-kicker">这本书会陪你做什么</div><h2>从“我想做一家小店”开始。</h2><div class="benefit-grid">${features.map(([title,text],i)=>`<div class="benefit"><span>0${i+1}</span><h3>${title}</h3><p>${text}</p></div>`).join('')}</div></section>`;
-home=home.replace('<section class="path-section">',`${benefits}<section class="path-section">`);
+const preview='<figure class="teaching-figure case-preview"><a href="examples/restaurant/index.html?stage=3"><img src="assets/screenshots/05-second-station.png" alt="餐厅案例实际运行画面：购入第二工位后，两个炉灶正在同时制作简餐" width="1280" height="720" loading="lazy" decoding="async"></a><figcaption>书中的餐厅能直接玩。这是购入第二工位后的营业画面。<a href="examples/restaurant/index.html?stage=3">打开案例试玩 ↗</a></figcaption></figure>';
+home=home.replace('<section class="path-section">',`${preview}${benefits}<section class="path-section">`);
 home=home.replace(/<div class="workflow">[\s\S]*?<\/div>/,`<div class="stage-grid"><a href="examples/restaurant/index.html?stage=1"><b>01 先开门卖简餐</b><span>采购、制作、收款与结算</span></a><a href="examples/restaurant/index.html?stage=2"><b>02 换菜单，看客流</b><span>菜单、价格、预告与损耗</span></a><a href="examples/restaurant/index.html?stage=3"><b>03 经营七天</b><span>设备、七天目标与存档</span></a></div>`).replace('从第一步，走到第一次更新','一页读下去，无需逐章翻页。');
 home=home.replace('当前是首轮书稿，尚未附完整餐厅成品、美术包或真人试玩数据。欢迎指出错误、提交实践反馈，一起把过程写得更扎实。','案例现已提供源码、原创矢量图标、合成声音与规则测试。为便于学习，布局与岗位做了简化；自由装修、独立员工寻路、背景音乐与真人试玩研究不在本版范围。');
 home=home.replace('每章提供方法、案例、AI 任务示例与验收方式。配套仓库包含立项、调研、任务和发布模板，以及可运行的经济模型。','每章都围绕一件具体的事：怎样让 AI 做出采购、菜单、画面、声音或保存。附录里的示例可以直接复制，再换成自己的要求。');
@@ -68,5 +78,5 @@ for(const c of documents){
  search.find(x=>x.slug===c.slug).sections=headings.map(([,id,title,text])=>({id,title,text:text.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ')}));
 }
 await fs.writeFile(path.join(out,'search.json'),JSON.stringify(search));
-stats.figures=11;stats.playableStages=3;await fs.writeFile(path.join(out,'stats.json'),JSON.stringify(stats,null,2));
+stats.figures=12;stats.screenshots=screenshotNames.length;stats.playableStages=3;await fs.writeFile(path.join(out,'stats.json'),JSON.stringify(stats,null,2));
 console.log('Enhanced continuous reading, section search, illustrated homepage, runnable case and ZIP download.');

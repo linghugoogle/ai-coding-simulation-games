@@ -21,6 +21,8 @@
   .stage-grid b { font-size:13px; font-weight:600; }.stage-grid span { color:var(--muted); font-size:11px; }
   .reading-intro { font-size:12px; color:var(--muted); display:flex; flex-wrap:wrap; gap:10px 18px; padding:0 0 24px; border-bottom:1px solid var(--line); margin-bottom:30px; }
   /* 页顶留白统一由 html 的 scroll-padding-top 提供，避免锚点偏移叠加。 */
+  /* 阅读位置由目录控制，避免浏览器焦点锚定额外改变滚动。 */
+  body[data-reading=true] { overflow-anchor:none; }
   .book-chapter { scroll-margin-top:0px; }
   .book-chapter+.book-chapter { margin-top:80px; padding-top:34px; border-top:1px solid var(--line); }
   .chapter-divider { display:flex; justify-content:space-between; gap:16px; color:var(--muted); font-size:11px; margin-bottom:18px; letter-spacing:1px; }
@@ -29,6 +31,7 @@
   .teaching-figure img { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:9px; background:#f7f7f0; }
   .figure-scroll { overflow-x:auto; border-radius:9px; }
   .teaching-figure figcaption { font-size:12px; line-height:1.8; color:var(--muted); text-align:center; margin:11px 0 0; }
+  .screenshot-figure figcaption { text-align:left; }
   #reading-position { font-size:11px; color:var(--muted); max-width:200px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
   #reading-progress { position:absolute; bottom:-1px; height:2px; left:0; width:100%; pointer-events:none; background:transparent; }
   #reading-progress::before { content:""; display:block; height:100%; width:var(--book-progress,0%); background:var(--accent); }
